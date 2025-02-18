@@ -6,8 +6,8 @@ bluetooth.onBluetoothDisconnected(function () {
     basic.showIcon(IconNames.Sad)
 })
 input.onButtonPressed(Button.A, function () {
-    bluetooth.uartWriteString("Player A")
     basic.showString("A")
+    bluetooth.uartWriteString("Player A")
     chanceA = Chance
 })
 input.onButtonPressed(Button.AB, function () {
@@ -21,8 +21,8 @@ input.onButtonPressed(Button.AB, function () {
         basic.showString("G AB")
         bluetooth.uartWriteString("AB")
     }
-    chanceA += 3
-    chanceB += 3
+    chanceA = 3
+    chanceB = 3
 })
 bluetooth.onUartDataReceived(serial.delimiters(Delimiters.Hash), function () {
     cmd = bluetooth.uartReadUntil(serial.delimiters(Delimiters.Hash))
@@ -31,8 +31,8 @@ bluetooth.onUartDataReceived(serial.delimiters(Delimiters.Hash), function () {
     basic.showIcon(IconNames.Happy)
 })
 input.onButtonPressed(Button.B, function () {
-    bluetooth.uartWriteString("Player B")
     basic.showString("B")
+    bluetooth.uartWriteString("Player B")
     chanceB = Chance
 })
 input.onGesture(Gesture.Shake, function () {
