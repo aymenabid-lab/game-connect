@@ -8,13 +8,21 @@ bluetooth.onBluetoothDisconnected(function () {
 input.onButtonPressed(Button.A, function () {
     bluetooth.uartWriteString("Player A")
     basic.showString("A")
-    basic.showIcon(IconNames.Yes)
-    basic.pause(100)
-    basic.showIcon(IconNames.Happy)
-    chanceA = 3
+    chanceA = Chance
 })
 input.onButtonPressed(Button.AB, function () {
-    bluetooth.uartWriteString("AB")
+    if (chanceA == 0 && chanceB == 2 || (chanceA == 1 && chanceB == 0 || chanceA == 2 && chanceB == 1)) {
+        basic.showString("G A")
+        bluetooth.uartWriteString("A")
+    } else if (chanceB == 0 && chanceA == 2 || (chanceB == 1 && chanceA == 0 || chanceB == 2 && chanceA == 1)) {
+        basic.showString("G B")
+        bluetooth.uartWriteString("B")
+    } else {
+        basic.showString("G AB")
+        bluetooth.uartWriteString("AB")
+    }
+    chanceA += 3
+    chanceB += 3
 })
 bluetooth.onUartDataReceived(serial.delimiters(Delimiters.Hash), function () {
     cmd = bluetooth.uartReadUntil(serial.delimiters(Delimiters.Hash))
@@ -25,10 +33,7 @@ bluetooth.onUartDataReceived(serial.delimiters(Delimiters.Hash), function () {
 input.onButtonPressed(Button.B, function () {
     bluetooth.uartWriteString("Player B")
     basic.showString("B")
-    basic.showIcon(IconNames.Yes)
-    basic.pause(100)
-    basic.showIcon(IconNames.Happy)
-    chanceB = 3
+    chanceB = Chance
 })
 input.onGesture(Gesture.Shake, function () {
     Chance = randint(0, 2)
@@ -42,32 +47,15 @@ input.onGesture(Gesture.Shake, function () {
             # . . . #
             # # # # #
             `)
-    } else {
+    } else if (Chance == 2) {
         basic.showIcon(IconNames.Scissors)
     }
-    if (chanceA == 3) {
-        chanceA += Chance
-    } else if (chanceB == 3) {
-        chanceA += Chance
-    } else {
-        if (chanceA == 0 && chanceB == 2 || (chanceA == 1 && chanceB == 0 || chanceA == 2 && chanceB == 1)) {
-            bluetooth.uartWriteString("A")
-            chanceA += 3
-        } else if (chanceB == 0 && chanceA == 2 || (chanceB == 1 && chanceA == 0 || chanceB == 2 && chanceA == 1)) {
-            bluetooth.uartWriteString("B")
-            chanceB += 3
-        } else {
-            bluetooth.uartWriteString("A")
-            chanceA += 3
-            basic.pause(100)
-            bluetooth.uartWriteString("B")
-            chanceB += 3
-        }
-    }
 })
+let cmd = ""
 let Chance = 0
 let chanceB = 0
-let cmd = ""
 let chanceA = 0
 basic.showIcon(IconNames.Asleep)
 music.play(music.builtinPlayableSoundEffect(soundExpression.hello), music.PlaybackMode.InBackground)
+chanceA += 3
+chanceB += 3
